@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     folder: 'img/',        // pasta onde estão as fotos
     prefix: 'foto-',       // prefixo do nome do arquivo
     extension: 'jpg',      // extensão dos arquivos (jpg, jpeg, png...)
-    totalPhotos: 84,       // quantidade total de fotos (foto-001 até foto-084)
+    totalPhotos: 78,       // quantidade total de fotos (foto-001 até foto-084)
     padLength: 3,          // quantidade de dígitos no número (001, 002...)
   };
 
