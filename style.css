@@ -1,0 +1,494 @@
+/* ==========================================================================
+   Maria & João — 01.08.2026
+   Álbum digital de casamento
+   ========================================================================== */
+
+:root {
+  /* Paleta */
+  --color-bg: #FAFAFA;
+  --color-surface: #FFFFFF;
+  --color-text: #2C2C2C;
+  --color-text-soft: #6b6660;
+  --color-accent: #C1A279;
+  --color-accent-dark: #a3855e;
+  --color-line: #e7e2da;
+
+  /* Tipografia */
+  --font-display: 'Cormorant Garamond', serif;
+  --font-body: 'Montserrat', sans-serif;
+
+  /* Espaçamento */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 2rem;
+  --space-lg: 4rem;
+  --space-xl: 7rem;
+
+  /* Outros */
+  --radius: 2px;
+  --transition: 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+  --shadow-soft: 0 20px 60px -20px rgba(44, 44, 44, 0.25);
+  --max-width: 1180px;
+}
+
+/* ---------- Reset ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-weight: 300;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; display: block; }
+
+h1, h2, h3 { font-family: var(--font-display); font-weight: 500; margin: 0; }
+
+a { color: inherit; text-decoration: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Foco visível para acessibilidade */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* ---------- Layout utilities ---------- */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+.container--narrow { max-width: 760px; }
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color:#efbf04;
+  margin: 0 0 var(--space-sm);
+}
+.eyebrow--dark { color: var(--color-accent-dark); }
+
+.section-title {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  margin-bottom: var(--space-sm);
+  letter-spacing: 0.01em;
+}
+
+.section-subtitle {
+  color: var(--color-text-soft);
+  font-size: 0.98rem;
+  font-weight: 300;
+  max-width: 46ch;
+  margin: 0 auto var(--space-lg);
+}
+
+.divider {
+  display: block;
+  width: 56px;
+  height: 1px;
+  background: var(--color-accent);
+  margin: var(--space-md) auto 0;
+}
+
+section {
+  padding: var(--space-xl) 0;
+}
+
+/* ---------- Selo / assinatura flutuante ---------- */
+.seal {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 64px;
+  height: 64px;
+  z-index: 40;
+  opacity: 0;
+  transform: translateY(10px) scale(0.9);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  pointer-events: none;
+}
+.seal.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+.seal-ring {
+  fill: rgba(255,255,255,0.9);
+  stroke: var(--color-accent);
+  stroke-width: 1.2;
+  filter: drop-shadow(0 6px 16px rgba(44,44,44,0.18));
+}
+.seal-initials {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.7rem;
+  fill: var(--color-accent-dark);
+}
+
+@media (max-width: 640px) {
+  .seal { width: 48px; height: 48px; bottom: 16px; right: 16px; }
+  .seal-initials { font-size: 1.9rem; }
+}
+
+/* ==========================================================================
+   HERO
+   ========================================================================== */
+.hero {
+  position: relative;
+  height: 100vh;
+  min-height: 560px;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+}
+
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(20, 18, 16, 0.35) 0%,
+    rgba(20, 18, 16, 0.30) 45%,
+    rgba(20, 18, 16, 0.65) 100%
+  );
+}
+
+.hero__content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: #efbf04;
+  padding: 0 var(--space-md);
+  animation: heroReveal 1.4s ease both;
+}
+
+@keyframes heroReveal {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero__content .eyebrow {
+  text-shadow:
+    -1px -1px 0 #000,
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000,
+     0    0   3px rgba(0,0,0,0.4);
+}
+
+.hero__names {
+  font-size: clamp(2.8rem, 9vw, 6rem);
+  letter-spacing: 0.02em;
+  font-weight: 500;
+  line-height: 1.05;
+  -webkit-text-stroke: 1.5px #000;
+  paint-order: stroke fill;
+  text-shadow:
+    -1px -1px 0 #000,
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000,
+     0    0   6px rgba(0,0,0,0.35);
+}
+.hero__names .amp {
+  font-style: italic;
+  color: #efbf04;
+  padding: 0 0.1em;
+}
+
+.hero__date {
+  margin-top: var(--space-sm);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  letter-spacing: 0.5em;
+  font-weight: 300;
+  color: #efbf04;
+  text-indent: 0.5em; /* compensa letter-spacing final */
+  text-shadow:
+    -1px -1px 0 #000,
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000,
+     0    0   3px rgba(0,0,0,0.4);
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: var(--space-md);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255,255,255,0.85);
+}
+
+.scroll-indicator__line {
+  width: 1px;
+  height: 46px;
+  background: rgba(255,255,255,0.5);
+  position: relative;
+  overflow: hidden;
+}
+.scroll-indicator__line::after {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--color-accent);
+  animation: scrollLine 2.2s ease-in-out infinite;
+}
+@keyframes scrollLine {
+  0%   { top: -100%; }
+  60%  { top: 100%; }
+  100% { top: 100%; }
+}
+
+.scroll-indicator__text {
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   BOAS-VINDAS
+   ========================================================================== */
+.welcome {
+  background: var(--color-bg);
+  text-align: center;
+}
+
+.welcome__text {
+  font-size: 1.05rem;
+  font-weight: 300;
+  color: var(--color-text-soft);
+  max-width: 60ch;
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   VÍDEO
+   ========================================================================== */
+.video-section {
+  background: var(--color-surface);
+  text-align: center;
+}
+
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  aspect-ratio: 9 / 16;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--color-line);
+}
+
+.video-wrapper video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: cover;
+  background: #000;
+}
+
+/* ==========================================================================
+   GALERIA
+   ========================================================================== */
+.gallery {
+  background: var(--color-bg);
+}
+
+.gallery__filters {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.filter-btn {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid var(--color-line);
+  color: var(--color-text-soft);
+  padding: 0.7em 1.6em;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.filter-btn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-text);
+}
+
+.filter-btn.is-active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
+}
+
+.gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-sm);
+}
+
+.gallery__item {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  background: var(--color-line);
+  border: 1px solid var(--color-line);
+  opacity: 0;
+  animation: fadeIn 0.6s ease forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+.gallery__item.is-hidden {
+  display: none;
+}
+
+.gallery__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.gallery__item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.28) 100%);
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.gallery__item:hover img { transform: scale(1.03); }
+.gallery__item:hover::after { opacity: 1; }
+
+.gallery__hint {
+  text-align: center;
+  color: var(--color-text-soft);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  margin-top: var(--space-md);
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+.footer {
+  background: var(--color-text);
+  color: rgba(255,255,255,0.75);
+  text-align: center;
+  padding: var(--space-lg) var(--space-md);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+}
+
+.footer__ornament {
+  display: block;
+  color: var(--color-accent);
+  font-size: 1rem;
+  margin-bottom: var(--space-sm);
+}
+
+.footer__dot {
+  color: var(--color-accent);
+  margin: 0 0.4em;
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE
+   ========================================================================== */
+
+/* Tablet: 3 colunas */
+@media (max-width: 1024px) {
+  .gallery__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --space-lg: 3rem;
+    --space-xl: 4.5rem;
+  }
+
+  .hero__date { letter-spacing: 0.35em; }
+
+  .video-wrapper {
+    max-width: 300px;
+  }
+
+  .gallery__filters {
+    gap: 0.5rem;
+  }
+
+  .filter-btn {
+    padding: 0.6em 1.2em;
+    font-size: 0.65rem;
+  }
+}
+
+/* Mobile: 1 coluna, foto de largura total preservando o aspecto vertical */
+@media (max-width: 560px) {
+  .gallery__grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    max-width: 360px;
+    margin: 0 auto;
+  }
+}
+
+/* SimpleLightbox: ajuste fino de cor da UI para combinar com a paleta */
+.sl-overlay { background: rgba(20, 18, 16, 0.92) !important; }
+.sl-close, .sl-navigation a { color: #fff !important; opacity: 0.85; }
+.sl-counter { color: rgba(255,255,255,0.7) !important; }
